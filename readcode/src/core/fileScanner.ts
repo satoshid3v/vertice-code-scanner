@@ -136,6 +136,9 @@ export async function scanImageFile(file: File): Promise<VerticeScanResult | nul
       }
       return null;
     }
+    
+    // Si BarcodeDetector falló en encontrar algo, retornamos null aquí
+    return null;
   } catch (error) {
     console.error("[VerticeScanner] Error procesando archivo:", error);
     throw error;
