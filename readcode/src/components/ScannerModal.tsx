@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useVerticeScanner } from '../hooks/useVerticeScanner';
 import { ScannerOverlay } from './ScannerOverlay';
-import { VerticeScanResult } from '../core/scannerEngine';
+import type { VerticeScanResult } from '../core/scannerEngine';
 
 /**
  * @author Vertice Code

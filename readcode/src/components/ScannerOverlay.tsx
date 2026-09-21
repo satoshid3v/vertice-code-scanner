@@ -1,6 +1,5 @@
-import React from 'react';
 import { Scan, AlertCircle, Loader2, X } from 'lucide-react';
-import { VerticeScannerState } from '../core/scannerEngine';
+import type { VerticeScannerState } from '../core/scannerEngine';
 
 /**
  * @author Vertice Code

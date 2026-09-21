@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { VerticeScannerConfig, VerticeScannerState } from '../core/scannerEngine';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import type { VerticeScannerConfig, VerticeScannerState } from '../core/scannerEngine';
 
 /**
  * @author Vertice Code
@@ -14,16 +14,21 @@ export function useVerticeScanner(config: VerticeScannerConfig) {
     error: null
   });
 
+  const configRef = useRef(config);
+  useEffect(() => {
+    configRef.current = config;
+  }, [config]);
+
   const startScanner = useCallback(async () => {
     setState(s => ({ ...s, isInitializing: true, error: null }));
     try {
-      if (!config.videoRef.current) throw new Error("Video ref is missing");
+      if (!configRef.current.videoRef.current) throw new Error("Video ref is missing");
       
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: 'environment' } 
       });
       
-      config.videoRef.current.srcObject = stream;
+      configRef.current.videoRef.current.srcObject = stream;
       
       // Determine Engine
       const hasNative = 'BarcodeDetector' in window;
@@ -39,18 +44,18 @@ export function useVerticeScanner(config: VerticeScannerConfig) {
 
     } catch (err: any) {
       setState(s => ({ ...s, error: err.message, isInitializing: false }));
-      config.onError?.(err);
+      configRef.current.onError?.(err);
     }
-  }, [config]);
+  }, []);
 
   const stopScanner = useCallback(() => {
     setState(s => ({ ...s, isScanning: false }));
-    if (config.videoRef.current && config.videoRef.current.srcObject) {
-      const stream = config.videoRef.current.srcObject as MediaStream;
+    if (configRef.current.videoRef.current && configRef.current.videoRef.current.srcObject) {
+      const stream = configRef.current.videoRef.current.srcObject as MediaStream;
       stream.getTracks().forEach(track => track.stop());
-      config.videoRef.current.srcObject = null;
+      configRef.current.videoRef.current.srcObject = null;
     }
-  }, [config]);
+  }, []);
 
   return { state, startScanner, stopScanner };
 }

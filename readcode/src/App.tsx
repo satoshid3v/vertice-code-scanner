@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { ScannerModal } from './components/ScannerModal';
-import { VerticeScanResult } from './core/scannerEngine';
+import type { VerticeScanResult } from './core/scannerEngine';
 import { scanImageFile } from './core/fileScanner';
 import { Upload, Camera, Loader2, AlertCircle } from 'lucide-react';
 
